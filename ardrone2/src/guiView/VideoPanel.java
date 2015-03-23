@@ -1,6 +1,8 @@
 package guiView;
 
 
+import guiListener.KeyboardDrone;
+
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -28,7 +30,7 @@ public class VideoPanel extends JPanel {
 	private BufferedImage _camImgNew;
 	
 	
-	public VideoPanel(Controller controller){
+	public VideoPanel(Controller controller){ 
 		
 		Controller _controller = controller;
 		
