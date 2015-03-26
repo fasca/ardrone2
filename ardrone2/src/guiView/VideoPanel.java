@@ -28,12 +28,12 @@ import javax.swing.ImageIcon;
 public class VideoPanel extends JPanel {
 	private JLabel _camLabel;
 	private BufferedImage _camImgNew;
-	
-	
-	public VideoPanel(Controller controller){ 
+	private boolean _isHorizontal = true;
+	private ModelPanel _modelPanel;
+	public VideoPanel(Controller controller,ModelPanel modelPanel){ 
 		
 		Controller _controller = controller;
-		
+		_modelPanel = modelPanel;
 		this.setLayout(new BorderLayout());
 		this.setSize(640, 360);
 		
@@ -43,7 +43,7 @@ public class VideoPanel extends JPanel {
 		_camLabel = new JLabel();
 		this.add(_camLabel,BorderLayout.CENTER);
 		
-		KeepAlive keepAlive = new KeepAlive(_controller);
+		KeepAlive keepAlive = new KeepAlive(_controller,this); //--------------------------------
 		FrameGrabber fg = new FrameGrabber(_controller,this);
 		keepAlive.init();
 		fg.start();
@@ -66,10 +66,21 @@ public class VideoPanel extends JPanel {
 		_camLabel = new JLabel(icon);
 		this.add(_camLabel, BorderLayout.NORTH);
 		*/
-
-		
+	
 	}
-
+	
+	public ModelPanel getModelPanel(){
+		return _modelPanel;
+	}
+	
+	public boolean getIsHorizontal(){
+		return _isHorizontal;
+	}
+	
+	public void setIsHorizontal(boolean isHorizontal){
+		_isHorizontal = isHorizontal;
+	}
+	
 	public void setCam (BufferedImage camImgNew){
 		_camImgNew = camImgNew;
 	}

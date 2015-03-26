@@ -47,6 +47,10 @@ public class KeyboardDrone implements KeyListener {
 		_context = new DroneStateContext(controller, model);
 		_model = model;
 	}
+	
+	public DroneStateContext getContext(){
+		return _context;
+	}
 
 	public void execute(int key){
 		switch(key){

@@ -132,7 +132,8 @@ public class FrameGrabber extends Thread{
 	private BufferedImage _camImg;
 	private FFmpegFrameGrabber _fg;
 	private Controller _contr;
-	
+	private boolean _isHorizontal = true;
+	private int _seconde = 0;
 	JLabel _jlab = null;
    
   //dopoldne cvscalar=BGR  en format HSV
@@ -180,6 +181,8 @@ public class FrameGrabber extends Thread{
 		okno.setVisible(true);
 		
 	}
+	
+	
 	
 	 static IplImage hsvThreshold(IplImage orgImg) {
 	        IplImage imgHSV = cvCreateImage(cvGetSize(orgImg), 8, 3);
@@ -283,15 +286,46 @@ public class FrameGrabber extends Thread{
                 			yawMove = 0;
                 		}
                 		
-                		//if(pitchMove!=0&&yawMove!=0){
-                		//	System.out.println("Random: " +  ((Math.abs(pitchMove*2))*yawMove)*10  );
-                		//}
+                        //if(_panel.getModelPanel().getK().getContext().isGround() == false){
+                        	//Thread.sleep(10);
+                        	if(yawMove == 0 && pitchMove == 0){// pitchMove et yawMove == 0 pendant 5sec alors envoyer le changement de cam
+                        		if(_seconde == 1){
+                        			_isHorizontal = true;
+                        			_panel.setIsHorizontal(_isHorizontal);//Thread.sleep(2000);
+                        		}
+                        		if(_seconde == 201){
+                        			_isHorizontal = false;
+                        			_panel.setIsHorizontal(_isHorizontal);//Thread.sleep(2000);
+                        		}
+                        		if(_seconde>351){
+                        			_seconde=0;
+                        		}
+                        		System.out.println(_seconde);	
+                        		++_seconde;
+                        	}else if(yawMove != 0 && pitchMove != 0 && _isHorizontal == false){
+                        		String message = landing(_contr.getSeq());
+                    			_contr.sendMessage(message);
+                    			//_isHorizontal=true;
+                    			//_panel.setIsHorizontal(_isHorizontal);Thread.sleep(2000);
+                    			_seconde = 0;
+                        		System.out.println(_seconde);
+                        	}else{
+                        		_seconde = 0;
+                        		System.out.println(_seconde);
+                        	}
+                        		
+                        		
+                        		
+                        		
+                        		
                         //move(left_right_tilt,front_back_tilt,vertical_speed,angular_speed)
                         //stolp.letalnik.move(0,pitchMove,0, yawMove);
                         //roll,pitch,throttle,yaw
-                		String message = move(0, Convert.convert754(pitchMove), 0, Convert.convert754(yawMove), _contr.getSeq()); 
-						_contr.sendMessage(message);
-                		
+                        	if(_isHorizontal){
+                        		String message = move(0, Convert.convert754(pitchMove), 0, Convert.convert754(yawMove), _contr.getSeq()); 
+                        		_contr.sendMessage(message);
+                        	}
+						//}
                 		//System.out.println("Pitch: " + pitchMove);
                 		
                 		prevPosX = posX;
@@ -339,7 +373,11 @@ public class FrameGrabber extends Thread{
 					+ throttle + "," + yaw;
 		}
 	
-	
+		// Atterir
+		public static String landing(int seq) {
+			String LANDING = "290717696";
+			return "AT*REF=" + seq + "," + LANDING;
+		}
 	
 	
 	public static  BufferedImage scaleImage(BufferedImage img, int width, int height, Color background, int a, int b, float angle, int bt) {
@@ -367,7 +405,7 @@ public class FrameGrabber extends Thread{
 	        g.drawOval(Math.abs(a - width)+1, b+1, 31, 31);
 	        g.setColor(Color.white);
 	        g.setFont(new Font("Arial", Font.PLAIN, 16));
-	        g.drawString("PowPow: "+bt + "%", 5, 35);
+	        //g.drawString("PowPow: "+bt + "%", 5, 35);
 	        g.rotate(Math.toRadians(angle), width/2, height/2+10);
 	        g.drawLine(width/2-150, height/2-5, width/2 + 150, height/2-5);
 	        g.drawLine(width/2-150, height/2+5, width/2 + 150, height/2+5);

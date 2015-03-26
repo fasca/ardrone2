@@ -19,8 +19,9 @@ public class DronePanelGUI extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.setSize(WIDTH,HEIGHT);
 		
-		VideoPanel videoPanel = new VideoPanel(controller);
+
 		ModelPanel modelPanel = new ModelPanel(k,model);
+		VideoPanel videoPanel = new VideoPanel(controller,modelPanel);
 		
 		this.add(videoPanel, BorderLayout.NORTH);
 		this.add(modelPanel, BorderLayout.SOUTH);

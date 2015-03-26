@@ -26,7 +26,16 @@ public class DroneStateContext {
 		state = INDOOR;
 		_consoleModel = consoleModel;
 	}
-
+	
+	public boolean isGround(){
+		if(_currentState == _ground){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	// avancer
 	public void forward() {
 		System.out.println("drone context forward called\n");

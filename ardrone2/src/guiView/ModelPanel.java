@@ -26,8 +26,10 @@ public class ModelPanel extends JPanel implements Observer{
 	private JScrollPane _consolePane;
 	private JTextArea _consoleText;
 	
+	private KeyboardDrone _k;
+	
 	public ModelPanel(KeyboardDrone k,ConsoleModel model){
-		
+		_k=k;
 		this.setLayout(new BorderLayout());
 		this.setSize(350, 150);	
 		
@@ -60,6 +62,10 @@ public class ModelPanel extends JPanel implements Observer{
 
 	public void update(Observable o, Object arg) {
 		_consoleText.setText(_consoleModel.getText());
+	}
+	
+	public KeyboardDrone getK(){
+		return _k;
 	}
 		
 }
